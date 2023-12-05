@@ -18,7 +18,7 @@ interface Station {
   interface FilterState {
     station: string;
     commune: string;
-    department: string;
+    departement: string;
     region: string;
   }
   
@@ -28,7 +28,7 @@ const StationsTable: React.FC = () => {
   const [displayStations, setDisplayStations] = useState<Station[]>([]);
   const [page, setPage] = useState<number>(1);
   
-  const [filter, setFilter] = useState<FilterState>({ station: '', commune: '', department: '', region: '' });
+  const [filter, setFilter] = useState<FilterState>({ station: '', commune: '', departement: '', region: '' });
   const [selectedStations, setSelectedStations] = useState<string[]>([]);
   const stationsPerPage = 20;
 
@@ -36,6 +36,7 @@ const StationsTable: React.FC = () => {
   useEffect(() => {
     const fetchStations = async () => {
       const response = await axios.get(`https://hubeau.eaufrance.fr/api/v1/temperature/station`);
+      console.log(response.data.data)
       setAllStations(response.data.data);
       setDisplayStations(response.data.data.slice(0, stationsPerPage));
     };
@@ -46,7 +47,7 @@ const StationsTable: React.FC = () => {
     const filtered = allStations.filter(station => 
       (station.libelle_station?.toLowerCase().includes(filter.station.toLowerCase()) || filter.station === '') &&
       (station.libelle_commune?.toLowerCase().includes(filter.commune.toLowerCase()) || filter.commune === '') &&
-      (station.libelle_departement?.toLowerCase().includes(filter.department.toLowerCase()) || filter.department === '') &&
+      (station.libelle_departement?.toLowerCase().includes(filter.departement.toLowerCase()) || filter.departement === '') &&
       (station.libelle_region?.toLowerCase().includes(filter.region.toLowerCase()) || filter.region === '')
     );
     setDisplayStations(filtered.slice(0, stationsPerPage));
@@ -81,7 +82,7 @@ const StationsTable: React.FC = () => {
     <h1 className='pb-4'>Toutes les stations</h1>
       <TextField label="Station" name="station" onChange={handleFilterChange} />
       <TextField label="Commune" name="commune" onChange={handleFilterChange} />
-      <TextField label="Department" name="department" onChange={handleFilterChange} />
+      <TextField label="Departement" name="departement" onChange={handleFilterChange} />
       <TextField label="Region" name="region" onChange={handleFilterChange} />
       <TableContainer component={Paper}>
         <Table aria-label="stations table">
@@ -90,7 +91,7 @@ const StationsTable: React.FC = () => {
               <TableCell padding="checkbox"></TableCell>
               <TableCell>Station</TableCell>
               <TableCell>Commune</TableCell>
-              <TableCell>Department</TableCell>
+              <TableCell>Departement</TableCell>
               <TableCell>Region</TableCell>
             </TableRow>
           </TableHead>
